@@ -23,6 +23,27 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Keybindings
 bindkey -e
 
+# Wrapper for websearch
+omz_urlencode() {
+  if ! command -v jq &> /dev/null; then
+    echo "Error: jq is needed for URL-Encoding." >&2
+    return 1
+  fi
+    local query="$*"
+    echo -n "$query" | jq -s -R -r @uri
+}
+
+unalias open_command 2>/dev/null
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  open_command() { open "$@"; }
+else
+  open_command() { xdg-open "$@"; }
+fi
+
+# Vars
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=cyan'
+
 # Add in Powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
@@ -30,6 +51,9 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
+zinit snippet OMZP::web-search
+zinit snippet OMZP::docker-compose
+zinit snippet OMZP::docker
 
 # Load completions
 autoload -Uz compinit && compinit
