@@ -26,9 +26,9 @@ for config in "${Rice_configs[@]}"; do
     fi
 done
 
-echo "Copying ~/.zshrc"
+echo "Copying ~/.zshrc and .pk10k.zsh"
 cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
-cp -r "$REPO_DIR/Scripts" "$HOME"
+cp "$REPO_DIR/.pk10k.zsh" "$HOME/.pk10k.zsh"
 
 echo "Enabling execution for scripts"
 # TODO: add scripts
