@@ -155,6 +155,7 @@ Rice_Packages=(
     
     # notification
     swaync
+    waybar
     
     # application launchers
     rofi
