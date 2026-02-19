@@ -1,0 +1,8 @@
+[config]
+version_check = false 
+fallback_color = '#FFFFFF'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/components/colors.conf'
+post_hook = 'hyprctl reload'
