@@ -205,6 +205,7 @@ Aur_Rice_Packages=(
     gslapper
     wlogout
     matugen-bin
+    awww-bin
 )
   
 set_zsh_default() {
