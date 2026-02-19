@@ -194,7 +194,7 @@ Aur_Packages=(
 )  
   
 Aur_App_Packages=(
-    # browser
+    # communication
     vesktop
     
     # ide
