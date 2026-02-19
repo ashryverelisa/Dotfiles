@@ -1,0 +1,64 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 22,
+    "spacing": 4,
+    "reload_style_on_change": true,
+    "modules-left": [
+        "custom/launcher",
+    ],
+    "modules-center": [
+        "hyprland/workspaces",
+    ],
+    "modules-right": [
+        "clock",
+        "pulseaudio",
+        "custom/power"
+    ],
+    "custom/launcher": {
+        "format": "",
+        "tooltip-format": "Application launcher",    
+    },        
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "DP-1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        }
+    },    
+    "clock": {
+        "format": "{:%Y/%m/%d %H:%M:%S}",
+        "on-click": "kitty --class floating --title 'Calendar' -e calcurse",
+        "tooltip-format": "<b><span color='#ffae12'><big>Click to launch </big></span></b>\n\n<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "interval": 1
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 Muted",
+        "format-icons": {
+                "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "hyprctl dispatch exec pwvucontrol",
+        "tooltip-format": "Current volume: {volume}%"
+    },  
+    "custom/power": {
+        "exec": "~/.config/waybar/scripts/battery-status.sh",
+        "return-type": "json",
+        "interval": 10,
+        "on-click": "wlogout --buttons-per-row 3"
+    }
+}

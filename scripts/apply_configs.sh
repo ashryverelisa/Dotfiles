@@ -23,7 +23,7 @@ install_dotfiles() {
 install_dotfiles
 
 echo "Enabling execution for scripts"
-# TODO: add scripts
+find -L "$HOME/.config/waybar" -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 
 echo "Create files/directories"
 LATITUDE="0.0"
