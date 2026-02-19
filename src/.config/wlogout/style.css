@@ -1,0 +1,74 @@
+@import "colors.css";
+
+* {
+    background-image: none;
+    box-shadow: none;
+    font-family: "JetBrains Mono", monospace;
+}
+
+window {
+    background-color: rgba(30, 30, 46, 0.95); /* Mocha base */
+}
+
+button {
+    border-radius: 12px;
+    border: 2px solid @primary;
+    background-color: @surface_container;
+    color: @on_surface;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28%;
+    margin: 20px;
+    min-width: 110px;
+    min-height: 110px;
+    transition: background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+/* GTK-safe hover */
+button:hover {
+    background-color: @surface_container_highest;
+    border-color: @secondary;
+    box-shadow: 0 0 20px 0 rgba(203, 166, 247, 0.25);
+}
+
+/* Click effect */
+button:active {
+    background-color: @surface_container_high;
+}
+
+/* Optional subtle glow */
+button:hover {
+    box-shadow: 0 0 15px rgba(203, 166, 247, 0.4);
+}
+
+#lock {
+    background-image: image(url("/usr/share/wlogout/icons/lock.png"));
+    background-size: 80px 80px;
+}
+
+#logout {
+    background-image: image(url("/usr/share/wlogout/icons/logout.png"));
+    background-size: 80px 80px;
+}
+
+#shutdown {
+    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"));
+    background-size: 80px 80px;
+}
+
+#reboot {
+    background-image: image(url("/usr/share/wlogout/icons/reboot.png"));
+    background-size: 80px 80px;
+}
+
+#suspend {
+    background-image: image(url("/usr/share/wlogout/icons/suspend.png"));
+    background-size: 80px 80px;
+}
+
+#hibernate {
+    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"));
+    background-size: 80px 80px;
+}
