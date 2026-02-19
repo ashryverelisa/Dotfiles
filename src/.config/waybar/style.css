@@ -18,13 +18,28 @@ window#waybar {
 /* ============================================
    SHARED MODULE BASE
    ============================================ */
+#cpu,
+#custom-memory-gpu,
 #clock,
-#pulseaudio {
+#pulseaudio,
+#network.wifi {
     background: @surface_container_high;
     color: @on_surface;
     padding: 0 8px;
     margin: 0 2px;
     border-radius: 10px;
+}
+
+/* ============================================
+   LEFT COLOR PATTERN
+   secondary → tertiary → secondary → tertiary → secondary
+   ============================================ */
+#cpu {
+    color: @secondary;
+}
+
+#custom-memory-gpu {
+    color: @tertiary;
 }
 
 /* ============================================
@@ -80,6 +95,17 @@ window#waybar {
     color: @on_primary;
     padding: 0 10px;
     font-weight: 700;
+}
+
+/* ============================================
+   SPECIAL
+   ============================================ */
+#custom-power {
+    background: #E08290;
+    color: @on_error;
+    padding: 0 10px;
+    margin: 5px 5px 5px 0;
+    border-radius: 10px;
 }
 
 /* ============================================
