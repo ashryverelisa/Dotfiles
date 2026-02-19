@@ -20,14 +20,38 @@ install_dotfiles() {
     echo "Dotfiles stowed successfully!"
 }
 
+create_picture_folders() {
+    echo "Creating Pictures folders..."
+    
+    mkdir -p "$HOME/Pictures/Screenshots"
+    mkdir -p "$HOME/Pictures/Thumbnails"
+    mkdir -p "$HOME/Pictures/Wallpapers"
+    
+    echo "Pictures folders created."
+}
+
+make_scripts_executable() {
+    echo "Setting executable permissions for .sh scripts in ~/.config/waybar and ~/.config/hypr..."
+
+    find -L "$HOME/.config/waybar" -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
+
+    echo "Done."
+}
+
+set_zsh_default() {
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+
+    if [[ "${SHELL:-}" != "$zsh_path" ]]; then
+        echo "Setting zsh as default shell..."
+        chsh -s "$zsh_path"
+        echo "Log out and back in for the change to take effect."
+    else
+        echo "zsh is already the default shell."
+    fi
+}
+
 install_dotfiles
-
-echo "Enabling execution for scripts"
-find -L "$HOME/.config/waybar" -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
-
-echo "Create files/directories"
-LATITUDE="0.0"
-LONGITUDE="0.0"
-mkdir -p ~/Pictures
-mkdir -p ~/Pictures/Wallpapers
-mkdir -p ~/Pictures/Screenshots
+make_scripts_executable
+create_picture_folders
+set_zsh_default
