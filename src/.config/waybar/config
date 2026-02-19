@@ -20,7 +20,8 @@
     ],
     "custom/launcher": {
         "format": "",
-        "tooltip-format": "Application launcher",    
+        "tooltip-format": "Application launcher",
+        "on-click": "rofi -show drun -modi drun -theme ~/.config/rofi/grid.rasi"            
     },
     "cpu": {
         "format": "󰻠 {usage}%",
