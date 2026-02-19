@@ -107,6 +107,7 @@ System_Packages=(
     
     # system utilities
     polkit-gnome
+    stow
     
     # wayland essentials
     xdg-desktop-portal-gtk
@@ -192,7 +193,11 @@ Aur_Packages=(
 )  
   
 Aur_App_Packages=(
+    # browser
     vesktop
+    
+    # ide
+    rider
 )
 
 Aur_Rice_Packages=(
@@ -200,6 +205,19 @@ Aur_Rice_Packages=(
     wlogout
     matugen-bin
 )
+  
+set_zsh_default() {
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+
+    if [[ "${SHELL:-}" != "$zsh_path" ]]; then
+        echo "Setting zsh as default shell..."
+        chsh -s "$zsh_path"
+        echo "Log out and back in for the change to take effect."
+    else
+        echo "zsh is already the default shell."
+    fi
+}
 
 # Installation
 Final_Packages=()
@@ -261,6 +279,8 @@ if [ "$INSTALL_AUR" = true ]; then
         warn "No AUR packages selected"
     fi
 fi
+
+set_zsh_default
 
 printf "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 printf "          Installation Complete!\n"

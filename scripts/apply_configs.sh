@@ -1,34 +1,25 @@
 #!/bin/bash
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/src"
-CONFIG_TARGET="$HOME/.config"
-CONFIG_SOURCE="$REPO_DIR/.config"
 
-Rice_configs=(
+readonly DOTFILES_DIR="$HOME/Dotfiles/src"
 
-)
-  
-for config in "${Rice_configs[@]}"; do
-    if [ -e "$CONFIG_SOURCE/$config" ]; then
-        if [ -d "$CONFIG_SOURCE/$config" ]; then
-            mkdir -p "$CONFIG_TARGET/$config"
-            rsync -a --delete "$CONFIG_SOURCE/$config/" "$CONFIG_TARGET/$config/" || {
-                echo "  ✗ Failed to sync $config"
-                continue
-            }
-        else
-            cp "$CONFIG_SOURCE/$config" "$CONFIG_TARGET/$config" || {
-                echo "  ✗ Failed to copy $config"
-                continue
-            }
-        fi
-        echo "  ✓ Copied $config"
-        ((SYNCED_COUNT++))
+install_dotfiles() {
+    echo "Stowing dotfiles..."
+
+    if [[ ! -d "$DOTFILES_DIR/.config" ]]; then
+        echo "No .config directory found in $DOTFILES_DIR"
+        return
     fi
-done
 
-echo "Copying ~/.zshrc and .pk10k.zsh"
-cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
-cp "$REPO_DIR/.pk10k.zsh" "$HOME/.pk10k.zsh"
+    mkdir -p "$HOME/.config"
+
+    pushd "$DOTFILES_DIR" >/dev/null
+    stow --adopt -v -t "$HOME/.config" .config
+    popd >/dev/null
+
+    echo "Dotfiles stowed successfully!"
+}
+
+install_dotfiles
 
 echo "Enabling execution for scripts"
 # TODO: add scripts
@@ -36,6 +27,6 @@ echo "Enabling execution for scripts"
 echo "Create files/directories"
 LATITUDE="0.0"
 LONGITUDE="0.0"
-mkdir ~/Pictures
-mkdir ~/Pictures/Wallpapers
-mkdir ~/Pictures/Screenshots
+mkdir -p ~/Pictures
+mkdir -p ~/Pictures/Wallpapers
+mkdir -p ~/Pictures/Screenshots
