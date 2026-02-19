@@ -14,6 +14,7 @@ install_dotfiles() {
 
     pushd "$DOTFILES_DIR" >/dev/null
     stow --adopt -v -t "$HOME/.config" .config
+    stow --adopt -v -t "$HOME" .
     popd >/dev/null
 
     echo "Dotfiles stowed successfully!"
