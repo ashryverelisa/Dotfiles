@@ -34,6 +34,7 @@ make_scripts_executable() {
     echo "Setting executable permissions for .sh scripts in ~/.config/waybar and ~/.config/hypr..."
 
     find -L "$HOME/.config/waybar" -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
+    find -L "$HOME/.config/scripts" -type f -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 
     echo "Done."
 }
