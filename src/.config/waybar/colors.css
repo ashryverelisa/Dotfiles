@@ -16,3 +16,5 @@
 /* STATES */
 @define-color error     #ffb4ab;
 @define-color on_error  #690005;
+
+@define-color mauve #cba6f7;
