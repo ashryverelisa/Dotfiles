@@ -89,7 +89,6 @@ System_Packages=(
     # audio system
     pipewire
     pipewire-alsa
-    pipewire-jack
     pipewire-pulse
     gst-plugin-pipewire
     libpulse
@@ -106,7 +105,6 @@ System_Packages=(
     wpa_supplicant
     
     # system utilities
-    polkit-gnome
     stow
     
     # wayland essentials
@@ -148,6 +146,7 @@ Rice_Packages=(
     hyprpicker
     hyprsunset
     hyprutils
+    hyprpolkitagent
     
     # utilities
     grim
@@ -229,7 +228,7 @@ Final_Packages=()
 if [ ${#Final_Packages[@]} -gt 0 ]; then
     info "Installing ${#Final_Packages[@]} official packages"
 
-    if sudo pacman -Syu --needed --noconfirm "${Final_Packages[@]}"; then
+    if sudo pacman -Syu --needed "${Final_Packages[@]}"; then
         success "Official packages installed successfully"
     else
         error "Some official packages failed to install"
@@ -259,7 +258,7 @@ if [ "$INSTALL_AUR" = true ]; then
     if [ ${#Aur_Final_Packages[@]} -gt 0 ]; then
         info "Installing ${#Aur_Final_Packages[@]} AUR packages using $AUR_HELPER"
 
-        if "$AUR_HELPER" -S --needed --noconfirm "${Aur_Final_Packages[@]}"; then
+        if "$AUR_HELPER" -S --needed "${Aur_Final_Packages[@]}"; then
             success "AUR packages installed successfully"
         else
             error "Some AUR packages failed to install"
