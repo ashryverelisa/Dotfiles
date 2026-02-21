@@ -14,7 +14,7 @@
     ],
     "modules-right": [
         "clock",
-        "network#wifi",        
+        "network",        
         "pulseaudio",
         "custom/power"
     ],
@@ -62,15 +62,22 @@
         },
         "interval": 1
     },
-     "network#wifi": {
-        "format-ethernet": "󰈀 {ifname}",
-        "format-wifi": "󰤨 {signalStrength}%",
-        "format-disconnected": "󰤭 Disconnected",
-        "tooltip-format-wifi": "<b><span color='#ffae12'><big>󰤨 Connected to Wifi</big></span></b>\nIP: {ipaddr}\nWifi: {essid} ({signalStrength}%)",
-        "tooltip-format-ethernet": "<b><span color='#ffae12'><big>󰈀 Connected to Ethernet</big></span></b>\nIP: {ipaddr}\nConnected via {ifname}",
-        "tooltip-disconnected": "󰤭 Disconnected",
-        "on-click": "~/.config/waybar/scripts/wifi.sh"
-    },    
+    "network": {
+        "format": "{ifname}",
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰌘",
+        "format-disconnected": "󰌙",
+        "tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
+        "format-linked": "󰈁 {ifname} (No IP)",
+        "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+        "tooltip-format-ethernet": "{ifname} 󰌘",
+        "tooltip-format-disconnected": "󰌙 Disconnected",
+        "max-length": 30,
+        "format-icons": [
+            "󰤯", "󰤟", "󰤢", "󰤥", "󰤨"
+        ],
+        "on-click-right": "kitty nmtui"
+    },   
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟 Muted",
