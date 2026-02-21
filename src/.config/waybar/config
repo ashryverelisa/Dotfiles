@@ -7,7 +7,6 @@
     "modules-left": [
         "custom/launcher",
         "cpu",
-        "custom/memory-gpu",
         "custom/wallpaper"
     ],
     "modules-center": [
@@ -25,17 +24,10 @@
         "on-click": "rofi -show drun -modi drun -theme ~/.config/rofi/grid.rasi"            
     },
     "cpu": {
-        "format": "󰻠 {usage}%",
-        "interval": 2,
+        "format": "  {usage}%",
+        "tooltip": true,
         "on-click": "kitty --class floating --title floating -e sh -c 'while true; do btop; sleep 0.1; done' &"
-    },
-    "custom/memory-gpu": {
-        "exec": "~/.config/waybar/scripts/gpu.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 2,
-        "on-click": "kitty --class floating --title floating -e sh -c 'while true; do btop; sleep 0.1; done' &"
-    },     
+    }, 
     "custom/wallpaper": {
         "exec": "ls ~/Pictures/Wallpapers | wc -l",
         "format": "",
