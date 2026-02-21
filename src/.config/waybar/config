@@ -14,7 +14,7 @@
     ],
     "modules-right": [
         "clock",
-        "network",        
+        "network#wifi",        
         "pulseaudio",
         "custom/power"
     ],
@@ -29,7 +29,7 @@
         "on-click": "kitty --class floating --title floating -e sh -c 'while true; do btop; sleep 0.1; done' &"
     },
     "custom/memory-gpu": {
-        "exec": "~/.config/waybar/scripts/gpu.sh",
+        //"exec": "~/.config/waybar/scripts/gpu.sh",
         "format": "{}",
         "return-type": "json",
         "interval": 2,
@@ -62,22 +62,16 @@
         },
         "interval": 1
     },
-    "network": {
-        "format": "{ifname}",
-        "format-wifi": "{icon}",
-        "format-ethernet": "󰌘",
-        "format-disconnected": "󰌙",
-        "tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
-        "format-linked": "󰈁 {ifname} (No IP)",
-        "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
-        "tooltip-format-ethernet": "{ifname} 󰌘",
-        "tooltip-format-disconnected": "󰌙 Disconnected",
-        "max-length": 30,
-        "format-icons": [
-            "󰤯", "󰤟", "󰤢", "󰤥", "󰤨"
-        ],
-        "on-click-right": "kitty nmtui"
-    },   
+
+        "network#wifi": {
+            "format-ethernet": "󰈀 {ifname}",
+            "format-wifi": "󰤨 {signalStrength}%",
+            "format-disconnected": "󰤭 Disconnected",
+            "tooltip-format-wifi": "<b><span color='#fab387'><big>󰤨 Connected to Wifi</big></span></b>\n<span color='#89dceb'>IP:</span> <span color='#cdd6f4'>{ipaddr}</span>\n<span color='#89dceb'>Wifi:</span> <span color='#cdd6f4'>{essid} ({signalStrength}%)</span>",
+            "tooltip-format-ethernet": "<b><span color='#fab387'><big>󰈀 Connected to Ethernet</big></span></b>\n<span color='#89dceb'>IP:</span> <span color='#cdd6f4'>{ipaddr}</span>\n<span color='#89dceb'>Interface:</span> <span color='#cdd6f4'>{ifname}</span>",
+            "tooltip-disconnected": "<b><span color='#fab387'><big>󰤭 Network</big></span></b>\n<span color='#f38ba8'>Disconnected</span>",
+            "on-click": "~/.config/waybar/scripts/wifi.sh"
+        },  
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟 Muted",

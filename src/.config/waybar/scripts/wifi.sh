@@ -1,90 +1,82 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-nmcli -w 5 device wifi rescan
-
-current=$(nmcli -g NAME connection show --active | grep -v '^lo$' | head -n1 || true)
-
-mapfile -t wifi_lines < <(
-    nmcli -g SSID,SECURITY,SIGNAL device wifi list |
-    awk -F: 'NF && !seen[$1]++' |
-    sort -t: -k3 -rn
-)
-
-declare -A MAP
-entries=()
-
-entries+=(" Open network manager TUI")
-
-[[ -n "${current:-}" ]] && \
-    entries+=("󰖪 Disconnect from: $current")
-
-for line in "${wifi_lines[@]}"; do
-    IFS=: read -r ssid security signal <<< "$line"
-    [[ -z "$ssid" ]] && continue
-
-    if [[ "$security" == "--" ]]; then
-        icon=""
-        sec="Open"
-    else
-        icon=""
-        sec="$security"
-    fi
-
-    display="$icon $ssid ($sec) ${signal}%"
-    entries+=("$display")
-    MAP["$display"]="$ssid:$security"
-done
-
-selected=$(printf '%s\n' "${entries[@]}" | \
-    rofi -dmenu -i -p "Select WiFi")
-
-[[ -z "$selected" ]] && exit 0
-
-case "$selected" in
-    " Open network manager TUI")
-        kitty --class floating --title 'nmtui' -e nmtui
-        exit 0
-        ;;
-    "󰖪 Disconnect from:"*)
-        if nmcli connection down "$current"; then
-            notify-send "WiFi" "Disconnected from $current"
-        else
-            notify-send -u critical "WiFi" "Disconnect failed"
-        fi
-        exit 0
-        ;;
-esac
-
-IFS=: read -r ssid security <<< "${MAP[$selected]}"
-
-# ---- Connect Logic
-if [[ -z "$security" || "$security" == "--" ]]; then
-    nmcli device wifi connect "$ssid"
-
-elif [[ "$security" == *EAP* ]]; then
-    nmcli connection up id "$ssid"
-
-else
-    if nmcli connection show "$ssid" &>/dev/null; then
-        nmcli connection up id "$ssid"
-    else
-        password=$(rofi -dmenu -password -p "Password for $ssid")
-        [[ -z "$password" ]] && exit 0
-        nmcli device wifi connect "$ssid" password "$password"
-    fi
+nmcli device wifi rescan --wait 8
+current=$(nmcli -t -f NAME connection show --active | grep -v "lo" | head -n 1)
+wifi_list=$(nmcli -t -f SSID,SECURITY,SIGNAL device wifi list | \
+            sort -t: -k3 -rn | \
+            awk -F: '!seen[$1]++')
+display_list=$(echo "$wifi_list" | awk -F: '{
+    ssid = $1
+    security = $2
+    signal = $3
+    # Add lock icon based on security
+    if (security == "--") {
+        icon = ""
+        sec_text = "Open"
+    } else {
+        icon = ""
+        sec_text = security
+    }
+    printf "%s %-35s %3s%%\n", icon, ssid " (" sec_text ")", signal
+}')
+if [ -n "$current" ]; then
+    display_list="󰖪 Disconnect from: $current
+$display_list"
 fi
+display_list=" Open network manager TUI
+$display_list"
 
-# ---- Result Notification
-if [[ $? -eq 0 ]]; then
-    sleep 2
-    connectivity=$(nmcli -g CONNECTIVITY general)
-
-    if [[ "$connectivity" == "portal" ]]; then
-        notify-send "WiFi" "Connected to $ssid (Login required)"
+selected_display=$(echo -e "$display_list" | rofi -dmenu -i -p "Select WiFi Network")
+if [ -z "$selected_display" ]; then
+    exit 0
+fi
+if [[ "$selected_display" == "󰖪 Disconnect from:"* ]]; then
+    nmcli connection down "$current"
+    if [ $? -eq 0 ]; then
+        notify-send -a "System" "WiFi Manager" "󰖪 Disconnected from $current" -i preferences-desktop
     else
-        notify-send "WiFi" "Connected to $ssid"
+        notify-send -a "System" "WiFi Manager" " Failed to disconnect" -i preferences-desktop
     fi
-else
-    notify-send -u critical "WiFi" "Failed to connect to $ssid"
+elif [[ "$selected_display" == " Open network manager TUI" ]]; then
+    kitty --class floating --title 'nmtui' -e nmtui
+else 
+    # Remove icon and extract SSID
+    ssid=$(echo "$selected_display" | sed 's/^. //' | sed -E 's/\s+\(.*\)\s+[0-9]+%?$//')
+    security=$(echo "$wifi_list" | grep -F "^$ssid:" | cut -d: -f2)
+    
+    if [ -z "$security" ] || [ "$security" == "--" ]; then
+        # Open Network
+        nmcli device wifi connect "$ssid"
+        
+    elif [[ "$security" == *"EAP"* ]]; then
+        if nmcli -t -f NAME connection show | grep -q "^$ssid$"; then
+            nmcli connection up id "$ssid"
+        else
+            notify-send -a "System" -u critical "WiFi" "No profile for '$ssid'. Please create one first." -i preferences-desktop
+            exit 1
+        fi
+        
+    else
+        if nmcli -t -f NAME connection show | grep -q "^$ssid$"; then
+            nmcli connection up id "$ssid"
+        else
+            password=$(rofi -dmenu -password -p "Password for $ssid")
+            if [ -n "$password" ]; then
+                nmcli device wifi connect "$ssid" password "$password"
+            else
+                exit 0
+            fi
+        fi
+    fi
+    if [ $? -eq 0 ]; then
+        sleep 4
+        connectivity=$(nmcli -t -f CONNECTIVITY general | cut -d: -f2)
+        if [ "$connectivity" == "portal" ]; then
+            notify-send -a "System" "WiFi Manager" "󰖩 Connected to $ssid\nPortal detected, please log in." -i preferences-desktop
+        else
+            notify-send -a "System" "WiFi Manager" "󰖩 Connected to $ssid" -i preferences-desktop
+        fi
+    else
+        notify-send -a "System" "WiFi Manager" " Failed to connect to $ssid" -i preferences-desktop
+    fi
 fi
