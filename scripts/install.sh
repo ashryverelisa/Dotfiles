@@ -186,6 +186,9 @@ Rice_Packages=(
     unrar
     wget
     zip
+    
+    # icon themes
+    papirus-icon-theme
 )
   
 Aur_Packages=(
