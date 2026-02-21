@@ -39,6 +39,14 @@ window#waybar {
     color: @tertiary;
 }
 
+#custom-wallpaper {
+    background: @primary;
+    color: @surface_container_high;
+    padding: 4px 10px;
+    margin: 4px 2px;
+    border-radius: 8px;
+}
+
 /* ============================================
    PRIMARY BUTTON STYLE
    ============================================ */
