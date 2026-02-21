@@ -46,11 +46,9 @@ window#waybar {
    PRIMARY BUTTON STYLE
    ============================================ */
 #custom-launcher {
-    background: @primary;
     color: @on_primary;
     padding: 0 8px;
     margin: 0 2px;
-    border-radius: 10px;
 }
 
 /* ============================================
