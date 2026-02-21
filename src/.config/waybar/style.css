@@ -10,10 +10,6 @@
 window#waybar {
     background: transparent;
     color: @on_surface;
-    border-width: 2px;
-    border-radius: 7rem;
-    border-style: solid;
-    border-color: @mauve;
 }
 
 /* ============================================
